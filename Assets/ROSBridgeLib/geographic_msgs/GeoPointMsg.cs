@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Text;
 using SimpleJSON;
+using UnityEngine;
 
 /**
  * Define a geographic_msgs GeoPoint message. This has been hand-crafted from the corresponding
@@ -13,6 +14,7 @@ namespace ROSBridgeLib {
 			private float _latitude, _longitude, _altitude;
 
 			public GeoPointMsg(JSONNode msg) {
+				//Debug.Log ("GeoPointMsg with " + msg.ToString());
 				_latitude = float.Parse(msg["latitude"]);
 				_longitude  = float.Parse(msg["longitude"]);
 				_altitude = float.Parse(msg["altitude"]);

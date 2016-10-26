@@ -41,15 +41,15 @@ namespace ROSBridgeLib {
 				_msg = msg;
 			}
 
-			public Type getSubscriber() {
+			public Type GetSubscriber() {
 				return _subscriber;
 			}
 
-			public ROSBridgeMsg getMsg() {
+			public ROSBridgeMsg GetMsg() {
 				return _msg;
 			}
 
-			public string getTopic() {
+			public string GetTopic() {
 				return _topic;
 			}
 		};
@@ -205,7 +205,7 @@ namespace ROSBridgeLib {
 							lock(_queueLock) {
 								bool found = false;
 								for(int i=0;i<_taskQ.Count;i++) {
-									if(_taskQ[i].getTopic().Equals (topic)) {
+									if(_taskQ[i].GetTopic().Equals (topic)) {
 										_taskQ.RemoveAt (i);
 										_taskQ.Insert (i, newTask);
 										found = true;
@@ -237,7 +237,7 @@ namespace ROSBridgeLib {
 				}
 			}
 			if(newTask != null)
-				Update(newTask.getSubscriber (), newTask.getMsg ());
+				Update(newTask.GetSubscriber (), newTask.GetMsg ());
 
 			if (_serviceName != null) {
 				ServiceResponse (_serviceResponse, _serviceName, _serviceValues);

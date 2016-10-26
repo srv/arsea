@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Text;
 using SimpleJSON;
+using UnityEngine;
 
 /**
  * Define a auv_msgs NED message. This has been hand-crafted from the corresponding
@@ -13,6 +14,7 @@ namespace ROSBridgeLib {
 			private float _north, _east, _depth;
 
 			public NEDMsg(JSONNode msg) {
+				//Debug.Log ("NEDMsg with " + msg.ToString());
 				_north = float.Parse(msg["north"]);
 				_east  = float.Parse(msg["east"]);
 				_depth = float.Parse(msg["depth"]);

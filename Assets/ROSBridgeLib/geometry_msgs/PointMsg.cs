@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Text;
 using SimpleJSON;
+using UnityEngine;
 
 /**
  * Define a geometry_msgs point message. This has been hand-crafted from the corresponding
@@ -13,6 +14,7 @@ namespace ROSBridgeLib {
 			private float _x, _y, _z;
 
 			public PointMsg(JSONNode msg) {
+				//Debug.Log ("PointMsg with " + msg.ToString());
 				_x = float.Parse(msg["x"]);
 				_y = float.Parse(msg["y"]);
 				_z = float.Parse(msg["z"]);

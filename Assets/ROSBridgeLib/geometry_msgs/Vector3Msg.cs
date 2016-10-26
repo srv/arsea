@@ -2,6 +2,7 @@ using System.Collections;
 using System.Text;
 using SimpleJSON;
 using ROSBridgeLib.geometry_msgs;
+using UnityEngine;
 
 namespace ROSBridgeLib {
 	namespace geometry_msgs {
@@ -11,6 +12,7 @@ namespace ROSBridgeLib {
 			private double _z;
 			
 			public Vector3Msg(JSONNode msg) {
+				//Debug.Log ("Vector3Msg with " + msg.ToString());
 				_x = double.Parse(msg["x"]);
 				_y = double.Parse(msg["y"]);
 				_z = double.Parse(msg["z"]);

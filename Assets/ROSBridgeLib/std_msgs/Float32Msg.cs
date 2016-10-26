@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Text;
 using SimpleJSON;
+using UnityEngine;
 
 namespace ROSBridgeLib {
 	namespace std_msgs {
@@ -8,7 +9,8 @@ namespace ROSBridgeLib {
 			private float _data;
 			
 			public Float32Msg(JSONNode msg) {
-				_data = float.Parse(msg["data"]);
+				//Debug.Log ("Float32Msg with " + msg.ToString());
+				_data = float.Parse(msg);
 			}
 			
 			public Float32Msg(float data) {

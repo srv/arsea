@@ -135,7 +135,7 @@ namespace PointCloud.io
                     {
                         if(header.Fields.Count == 0)
                         {
-                            throw new PointCloudException("No fields found in pcb file.");
+                            throw new PointCloudException("No fields found in pcd file.");
                         }
 
                         string[] fields = line.Substring(7).Split(' ');
@@ -151,7 +151,7 @@ namespace PointCloud.io
                     {
                             if (header.Fields.Count == 0)
                         {
-                            throw new PointCloudException("No fields found in pcb file.");
+                            throw new PointCloudException("No fields found in pcd file.");
                         }
 
                         string[] fields = line.Substring(5).Split(' ');
@@ -168,7 +168,7 @@ namespace PointCloud.io
                     {
                         if (header.Fields.Count == 0)
                         {
-                            throw new PointCloudException("No fields found in pcb file.");
+                            throw new PointCloudException("No fields found in pcd file.");
                         }
 
                         string[] fields = line.Substring(6).Split(' ');

@@ -1,5 +1,9 @@
-﻿namespace PointCloud
+﻿using System.ComponentModel;
+using PointCloud.PointTypes.Converters;
+
+namespace PointCloud
 {
+	[TypeConverter(typeof(PointXYConverter))]
     public class PointXY : PointT
     {
         private float _x;

@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Text;
+using System.IO;
 using SimpleJSON;
 using ROSBridgeLib.std_msgs;
 using UnityEngine;
+
+using PointCloud.PointTypes;
+using PointCloud;
 
 /**
  * Define a PointCloud2 message.
@@ -20,6 +24,7 @@ namespace ROSBridgeLib {
 			private uint _point_step;
 			private uint _row_step;
 			private byte[] _data;
+			private PointCloud<PointXYZRGB> _cloud;
 
 
 			public PointCloud2Msg(JSONNode msg) {
@@ -31,7 +36,7 @@ namespace ROSBridgeLib {
 				_is_dense = msg["is_dense"].AsBool;
 				_point_step = uint.Parse(msg ["point_step"]);
 				_row_step = uint.Parse(msg ["row_step"]);
-				_data = System.Convert.FromBase64String(msg ["data"]);  // sure?
+				_cloud = ReadData(System.Convert.FromBase64String(msg ["data"]));
 			}
 
 			public PointCloud2Msg(HeaderMsg header, uint height, uint width, PointFieldMsg fields, bool is_bigendian, uint point_step, uint row_step, byte[] data, bool is_dense) {
@@ -43,7 +48,31 @@ namespace ROSBridgeLib {
 				_is_bigendian = is_bigendian;
 				_point_step = point_step;
 				_row_step = row_step;
-				_data = data;
+				_cloud = ReadData(data);
+			}
+
+			private PointCloud<PointXYZRGB> ReadData(byte[] byteArray) {
+				Stream stream = new MemoryStream(byteArray);
+				BinaryReader b = new BinaryReader(stream);
+
+				PointCloud<PointXYZRGB> cloud = new PointCloud<PointXYZRGB> ();
+
+				switch (_fields.GetDatatype()) {
+				case PointFieldMsg.FLOAT32:
+					for (int i = 0; i < _height * _width; i++) {
+						float x = b.ReadSingle ();
+						float y = b.ReadSingle ();
+						float z = b.ReadSingle ();
+						float rgb = b.ReadSingle ();
+						PointXYZRGB p = new PointXYZRGB (x,y,z,rgb);
+						cloud.Add (p);
+					}
+					break;
+				default:
+					Debug.LogError ("PointCloud datatype not supported!");	
+					break;
+				}
+				return cloud;
 			}
 
 			public uint GetWidth() {
@@ -62,9 +91,9 @@ namespace ROSBridgeLib {
 				return _row_step;
 			}
 
-			public byte[] GetData() {
-				return _data;
-			}
+			//public PointCloud<PointXYZRGB> GetCloud() {
+			//	return _cloud;
+			//}
 
 			public static string GetMessageType() {
 				return "sensor_msgs/PointCloud2";

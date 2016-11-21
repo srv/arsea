@@ -6,12 +6,14 @@ using System;
 
 
 public class ArseaViewer : MonoBehaviour {
+	public string ROS_IP = "192.168.1.173";
+	public int port = 9090;
 	private ROSBridgeWebSocketConnection ros = null;
 
 	// the critical thing here is to define our subscribers, publishers and service response handlers
 	void Start() {
 		// Set ROS
-		ros = new ROSBridgeWebSocketConnection("ws://192.168.1.173", 9090); 
+		ros = new ROSBridgeWebSocketConnection("ws://" + ROS_IP, port); 
 		ros.Connect();
         ros.AddSubscriber(typeof(RobotNavSts));
     }

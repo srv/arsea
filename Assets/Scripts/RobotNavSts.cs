@@ -22,7 +22,7 @@ public class RobotNavSts : ROSBridgeSubscriber
         return new NavStsMsg(msg);
     }
 
-    public new static void CallBack(ROSBridgeMsg msg)
+    public static void CallBack(ROSBridgeMsg msg)
     {
         Debug.Log("<color=green>INFO:</color> RobotNavSts CallBack!");
         GameObject robot = GameObject.Find("Robot");

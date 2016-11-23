@@ -19,7 +19,7 @@ namespace PointCloud
 
         public PointCloud2Prefab(PointCloud<PointXYZRGB> cloud, int idx, Material matVertex)
         {
-            Debug.Log("PointCloud2Prefab constructor");
+            //Debug.Log("PointCloud2Prefab constructor");
             _matVertex = matVertex;
             CreateFolders();
             Load(cloud, idx);
@@ -32,10 +32,10 @@ namespace PointCloud
 
         private void CreateFolders()
         {
-            Debug.Log("PointCloud2Prefab CreateFolders");
+            //Debug.Log("PointCloud2Prefab CreateFolders");
             if (!Directory.Exists(Application.dataPath + "/Temp/"))
             {
-                Debug.Log("Checking if folder " + Application.dataPath + "/Temp/" + " exists...");
+                //Debug.Log("Checking if folder " + Application.dataPath + "/Temp/" + " exists...");
                 UnityEditor.AssetDatabase.CreateFolder("Assets", "Temp");
             }
             if (!Directory.Exists(Application.dataPath + "/Temp/Clouds/"))
@@ -46,7 +46,7 @@ namespace PointCloud
 
         private void Load(PointCloud<PointXYZRGB> cloud, int global_idx)
         {
-            Debug.Log("PointCloud2Prefab Load");
+            //Debug.Log("PointCloud2Prefab Load");
             Vector3[] points = new Vector3[cloud.Size];
             Color[] colors = new Color[cloud.Size];
 
@@ -65,26 +65,23 @@ namespace PointCloud
             int numGroups = Mathf.CeilToInt(cloud.Size * 1.0f / _limitPoints * 1.0f);
 
             _pointCloud = new GameObject("cloud_" + global_idx.ToString());
+            _pointCloud.SetActive(false);
 
             for (int i = 0; i < numGroups - 1; i++)
             {
                 InstantiateMesh(points, colors, global_idx, i);
-                if (i % 10 == 0)
-                {
-                    Debug.Log(i.ToString() + " out of " + numGroups.ToString() + " PointGroups loaded");
-                }
                 //yield return null;
             }
 
             //Store PointCloud
-            Debug.Log("CreatePrefab...");
-            UnityEditor.PrefabUtility.CreatePrefab("Assets/Temp/Clouds/" + "cloud_" + global_idx.ToString() + ".prefab", _pointCloud);
-            Debug.Log("return");
+            //Debug.Log("CreatePrefab...");
+            //UnityEditor.PrefabUtility.CreatePrefab("Assets/Temp/Clouds/" + "cloud_" + global_idx.ToString() + ".prefab", _pointCloud);
+            //Debug.Log("return");
         }
 
         private void InstantiateMesh(Vector3[] points, Color[] colors, int global_idx, int local_idx)
         {
-            Debug.Log("InstantiateMesh");
+            //Debug.Log("InstantiateMesh");
             // Create Mesh
             GameObject pointGroup = new GameObject("cloud_" + global_idx.ToString() + "_" + local_idx);
             pointGroup.AddComponent<MeshFilter>();
@@ -99,14 +96,14 @@ namespace PointCloud
             {
                 UnityEditor.AssetDatabase.CreateFolder("Assets/Temp/Clouds", "cloud_" + global_idx.ToString());
             }
-            UnityEditor.AssetDatabase.CreateAsset(pointGroup.GetComponent<MeshFilter>().mesh, "Assets/Temp/Clouds/" + "cloud_" + global_idx.ToString() + @"/" + "cloud_" + global_idx.ToString() + "_" + local_idx + ".asset");
-            UnityEditor.AssetDatabase.SaveAssets();
-            UnityEditor.AssetDatabase.Refresh();
+            //UnityEditor.AssetDatabase.CreateAsset(pointGroup.GetComponent<MeshFilter>().mesh, "Assets/Temp/Clouds/" + "cloud_" + global_idx.ToString() + @"/" + "cloud_" + global_idx.ToString() + "_" + local_idx + ".asset");
+            //UnityEditor.AssetDatabase.SaveAssets();
+            //UnityEditor.AssetDatabase.Refresh();
         }
 
         private Mesh CreateMesh(Vector3[] points, Color[] colors, int id)
         {
-            Debug.Log("CreateMesh");
+            //Debug.Log("CreateMesh");
             Mesh mesh = new Mesh();
 
             int nPoints = _limitPoints;

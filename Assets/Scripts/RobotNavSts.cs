@@ -25,7 +25,7 @@ public class RobotNavSts : ROSBridgeSubscriber
 
   public new static void CallBack(ROSBridgeMsg msg)
   {
-    Debug.Log("<color=green>INFO:</color> RobotNavSts CallBack!");
+    //Debug.Log("<color=green>INFO:</color> RobotNavSts CallBack!");
     GameObject robot = GameObject.Find("Robot");
     if (robot == null)
     {
@@ -39,7 +39,7 @@ public class RobotNavSts : ROSBridgeSubscriber
       RPYMsg o = nav_sts.GetOrientation();
       //Debug.Log("<color=green>INFO:</color> Orientation is " + o.ToString());
       robot.transform.position = new Vector3(p.GetNorth(), -p.GetDepth(), p.GetEast());
-      robot.transform.rotation = Quaternion.Euler(o.GetRollDegrees(), o.GetYawDegrees(), o.GetPitchDegrees());
+      robot.transform.rotation = Quaternion.Euler(o.GetRollDegrees(), 180.0f+o.GetYawDegrees(), o.GetPitchDegrees());
     }
   }
 }

@@ -10,7 +10,9 @@ using System;
 public class ArseaViewer : MonoBehaviour {
     public string ROS_IP = "192.168.1.173";
     public int port = 9090;
+    public Transform robotToCamera;
     public Material matVertex;
+    public GameObject pointCloudContainer;
     private ROSBridgeWebSocketConnection ros = null;
 
     // the critical thing here is to define our subscribers, publishers and service response handlers
@@ -41,11 +43,11 @@ public class ArseaViewer : MonoBehaviour {
     private IEnumerator DrawCloud(PointCloud2Msg cloud_msg)
     {
         PointCloud2Prefab converter = new PointCloud2Prefab(cloud_msg.GetCloud(), cloud_msg.GetHeader().GetSeq(), matVertex);
-        Debug.Log("After PointCloud2Prefab");
-        GameObject clouds = GameObject.Find("PointCloud");
-        //GameObject robot = GameObject.Find("Robot");
-        GameObject cloud_go = Instantiate(converter.GetPrefab(), this.transform.position, this.transform.rotation) as GameObject;
-        cloud_go.transform.parent = clouds.transform;
+        GameObject cloud_go = converter.GetPrefab();
+        cloud_go.transform.position = this.transform.position;
+        cloud_go.transform.rotation = this.transform.rotation;
+        cloud_go.transform.parent = pointCloudContainer.transform;
+        cloud_go.SetActive(true);
         yield return null;
     }
 }

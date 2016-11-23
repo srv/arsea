@@ -1,4 +1,11 @@
-﻿using ROSBridgeLib;
+﻿/* 
+ * @brief ARSEA Project
+ * @author Miquel Massot Campos
+ * @author System, Robotics and Vision
+ * @author University of the Balearic Islands
+ */
+
+using ROSBridgeLib;
 using ROSBridgeLib.sensor_msgs;
 using System.Collections;
 using SimpleJSON;

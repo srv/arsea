@@ -1,4 +1,9 @@
-﻿#if UNITY_STANDALONE
+﻿/* 
+ * @brief Pointcloud library for .NET
+ * @author M. Hofman
+ */
+
+#if UNITY_STANDALONE
 #define IMPORT_GLENABLE
 #endif
 

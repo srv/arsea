@@ -1,11 +1,17 @@
-﻿using UnityEngine;
+﻿/* 
+ * @brief ARSEA Project
+ * @author Miquel Massot Campos
+ * @author System, Robotics and Vision
+ * @author University of the Balearic Islands
+ */
+
+using UnityEngine;
 using System.Collections;
 using ROSBridgeLib;
 using ROSBridgeLib.sensor_msgs;
 using PointCloud;
 using System.Reflection;
 using System;
-
 
 public class ArseaViewer : MonoBehaviour {
     public string ROS_IP = "192.168.1.173";

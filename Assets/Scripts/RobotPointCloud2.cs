@@ -19,12 +19,12 @@ public class RobotPointCloud2 : ROSBridgeSubscriber
 
     public new static string GetMessageTopic()
     {
-        return "/stereo_down/points2";
+        return "/octomap_points2_in"; // define the topic '/stereo_down/scaled_x2/points2' , '/octomap_server_local_plan/octomap_point_cloud_centers'
     }
 
     public new static string GetMessageType()
     {
-        return "sensor_msgs/PointCloud2";
+        return "sensor_msgs/PointCloud2"; // define the type of message. We wait for a PointCloud2 contained in the 'points' topic
     }
 
     public new static ROSBridgeMsg ParseMessage(JSONNode msg)
@@ -34,11 +34,11 @@ public class RobotPointCloud2 : ROSBridgeSubscriber
 
     public new static void CallBack(ROSBridgeMsg msg)
     {
-        //Debug.Log("<color=green>INFO:</color> RobotPointCloud2 CallBack!");
+        Debug.Log("<color=green>INFO:</color> RobotPointCloud2 CallBack!");
         if ( _i % 5 == 0)
         {
             PointCloud2Msg cloud_msg = (PointCloud2Msg)msg;
-            GameObject robot = GameObject.Find("Robot");
+            GameObject robot = GameObject.Find("Robot"); // "Robot" --> 
             ArseaViewer viewer = (ArseaViewer)robot.GetComponent(typeof(ArseaViewer));
             viewer.PushCloud(cloud_msg);
         }

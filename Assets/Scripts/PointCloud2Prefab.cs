@@ -59,16 +59,18 @@ namespace PointCloud
 
             for (int i = 0; i < cloud.Size; i++)
             {
-                points[i] = new Vector3(cloud[i].X, -cloud[i].Z, cloud[i].Y);
+                points[i] = new Vector3(-cloud[i].X, -cloud[i].Z, cloud[i].Y); // fbf 22/02/2017- changed the sign of x component to match it with the unity coord. system
                 colors[i] = new Color((float)cloud[i].R / 255.0f, (float)cloud[i].G / 255.0f, (float)cloud[i].B / 255.0f);
 
                 //if ( i % 1000 == 0)
                 //{
                 //    yield return null;
                 //}
+
+            // calculate the centroid as the gameobject transform.
             }
 
-            // Instantiate Point Groups
+            // Instantiate Point Groups. Number of groups depending on the limit on the number of points to be renderized for each point cloud. 
             int numGroups = Mathf.CeilToInt(cloud.Size * 1.0f / _limitPoints * 1.0f) + 1;
 
             _pointCloud = new GameObject("cloud_" + global_idx.ToString());
@@ -92,7 +94,7 @@ namespace PointCloud
             // Create Mesh
             GameObject pointGroup = new GameObject("cloud_" + global_idx.ToString() + "_" + local_idx);
             pointGroup.AddComponent<MeshFilter>();
-            pointGroup.AddComponent<MeshRenderer>();
+            pointGroup.AddComponent<MeshRenderer>();  
             pointGroup.GetComponent<Renderer>().material = _matVertex;
 
             pointGroup.GetComponent<MeshFilter>().mesh = CreateMesh(points, colors, local_idx);

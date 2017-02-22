@@ -21,7 +21,7 @@ public class ArseaViewer : MonoBehaviour {
     public int port = 9090;
     public Transform robotToCamera;
     public Material matVertex;
-    public GameObject pointCloudContainer;
+    public GameObject pointCloudContainer; // fbf 22/02/2017 gameobject pointCloudContainer is attached to the GameObject PointCloud in Unity.
     private ROSBridgeWebSocketConnection ros = null;
     public Text linear_robotVelocity;
     public Text angular_robotVelocity;
@@ -79,13 +79,20 @@ public class ArseaViewer : MonoBehaviour {
         Debug.Log("<color=green>INFO:</color> Point cloud Prefab ");
         PointCloud2Prefab converter = new PointCloud2Prefab(cloud_msg.GetCloud(), cloud_msg.GetHeader().GetSeq(), matVertex);
         Debug.Log("<color=green>INFO:</color> GetPrefab ");
-        GameObject cloud_go = converter.GetPrefab(); // GetPrefab is a method of PointCloud2Prefab. Create a GameObject associated to ArseaViewer
+        // fbf 22/02/2017 simplified the conexion between the unity Gameobject and the resulting pointcloud . Direct connexion instead of using an intermediate Gameobject. 
+        pointCloudContainer = converter.GetPrefab();
+      ///  GameObject cloud_go = converter.GetPrefab(); // GetPrefab is a method of PointCloud2Prefab. Create a new Unity GameObject type PointCloud2Prefab 
+        // and associate the converted Point Cloud
         Debug.Log("<color=green>INFO:</color> GetPrefab ");
-        cloud_go.transform.position = this.transform.position;
-        cloud_go.transform.rotation = this.transform.rotation;
-        cloud_go.transform.parent = pointCloudContainer.transform;
+     ///   cloud_go.transform.position = new Vector3(0.0f, 0.0f, 0.0f); // set the position of the new GameObject in the origin. All point contained in the object are refered to the origin. 
+    ///    cloud_go.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1); // set the rotation of the GameObject in the origin.
+      //  cloud_go.transform.position = this.transform.position;
+     //   cloud_go.transform.rotation = this.transform.rotation;
+    ///    cloud_go.transform.parent = pointCloudContainer.transform; // fbf 22/02/2017. Link the cloud_go.transform computed in the script with the Unity gameobject
+    ///    
         Debug.Log("<color=green>INFO:</color> set active ");
-        cloud_go.SetActive(true); // activate Point Cloud in Unity
+        pointCloudContainer.SetActive(true);
+        /// cloud_go.SetActive(true); // activate Point Cloud in Unity
         yield return null;
     }
 }

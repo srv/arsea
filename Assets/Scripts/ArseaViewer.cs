@@ -22,6 +22,7 @@ public class ArseaViewer : MonoBehaviour {
     public Transform robotToCamera;
     public Material matVertex;
     public GameObject pointCloudContainer; // fbf 22/02/2017 gameobject pointCloudContainer is attached to the GameObject PointCloud in Unity.
+    public GameObject Texture; 
     private ROSBridgeWebSocketConnection ros = null;
     public Text linear_robotVelocity;
     public Text angular_robotVelocity;
@@ -36,13 +37,14 @@ public class ArseaViewer : MonoBehaviour {
         Debug.Log("<color=green>INFO:</color> Connecting to " + ROS_IP + "...");
         ros = new ROSBridgeWebSocketConnection("ws://" + ROS_IP, port); 
         ros.Connect();
-        ros.AddSubscriber(typeof(RobotNavSts)); // add subscribers as defined in the corresponding classes
-        ros.AddSubscriber(typeof(RobotPointCloud2));
-
+      //  ros.AddSubscriber(typeof(RobotNavSts)); // add subscribers as defined in the corresponding classes
+     //   ros.AddSubscriber(typeof(RobotPointCloud2));
+        ros.AddSubscriber(typeof(RobotImage));
        // ros.AddPublisher(typeof(RobotBodyVelocityRequest));
 
        linear_robotVelocity.text = "0.0";
        angular_robotVelocity.text = "0.0";
+       
     }
 
     // extremely important to disconnect from ROS. Otherwise packets continue to flow
@@ -69,7 +71,32 @@ public class ArseaViewer : MonoBehaviour {
         NED_position.text = "(" + System.Math.Round(position.GetNorth(),2) + ", " + System.Math.Round(position.GetEast(),2) + ", " + System.Math.Round(position.GetDepth(),2) + ")";
     }
 
-    public void PushCloud(PointCloud2Msg cloud_msg)
+
+    public void Paint_image(byte[] color_data, uint data_size , uint nrows, uint ncolumns)
+    {
+        Debug.Log("<color=green>INFO:</color> Paint Image ");
+        // var texture = new Texture2D((int)ncolumns, (int)nrows, TextureFormat.ARGB32, false);
+        var texture = new Texture2D(50, 50, TextureFormat.ARGB32, false);
+        for (int i=0; i< 50; i++)
+        {
+            for(int j=0;j<50; j++)
+            {
+                texture.SetPixel(i, j, Color.black);
+            }
+            
+        }
+        texture.Apply();
+
+        Texture = new GameObject("imatge"); //used to link this local data with Unity scene
+        GameObject img = new GameObject("img"); 
+        img.AddComponent(typeof(Texture2D));
+        img.GetComponent<Renderer>().material.mainTexture = texture;
+        img.transform.parent = Texture.transform;
+
+        
+    }
+
+public void PushCloud(PointCloud2Msg cloud_msg)
     {
         StartCoroutine("DrawCloud", cloud_msg); // starts a C-O-routine called "drawcloud"
     }
@@ -80,19 +107,19 @@ public class ArseaViewer : MonoBehaviour {
         PointCloud2Prefab converter = new PointCloud2Prefab(cloud_msg.GetCloud(), cloud_msg.GetHeader().GetSeq(), matVertex);
         Debug.Log("<color=green>INFO:</color> GetPrefab ");
         // fbf 22/02/2017 simplified the conexion between the unity Gameobject and the resulting pointcloud . Direct connexion instead of using an intermediate Gameobject. 
-        pointCloudContainer = converter.GetPrefab();
-      ///  GameObject cloud_go = converter.GetPrefab(); // GetPrefab is a method of PointCloud2Prefab. Create a new Unity GameObject type PointCloud2Prefab 
+      //  pointCloudContainer = converter.GetPrefab();
+        GameObject cloud_go = converter.GetPrefab(); // GetPrefab is a method of PointCloud2Prefab. Create a new Unity GameObject type PointCloud2Prefab 
         // and associate the converted Point Cloud
         Debug.Log("<color=green>INFO:</color> GetPrefab ");
-     ///   cloud_go.transform.position = new Vector3(0.0f, 0.0f, 0.0f); // set the position of the new GameObject in the origin. All point contained in the object are refered to the origin. 
-    ///    cloud_go.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1); // set the rotation of the GameObject in the origin.
+        cloud_go.transform.position = new Vector3(0.0f, 0.0f, 0.0f); // set the position of the new GameObject in the origin. All point contained in the object are refered to the origin. 
+        cloud_go.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1); // set the rotation of the GameObject in the origin.
       //  cloud_go.transform.position = this.transform.position;
      //   cloud_go.transform.rotation = this.transform.rotation;
-    ///    cloud_go.transform.parent = pointCloudContainer.transform; // fbf 22/02/2017. Link the cloud_go.transform computed in the script with the Unity gameobject
+        cloud_go.transform.parent = pointCloudContainer.transform; // fbf 22/02/2017. Link the cloud_go.transform computed in the script with the Unity gameobject
     ///    
         Debug.Log("<color=green>INFO:</color> set active ");
-        pointCloudContainer.SetActive(true);
-        /// cloud_go.SetActive(true); // activate Point Cloud in Unity
+    //    pointCloudContainer.SetActive(true);
+        cloud_go.SetActive(true); // activate Point Cloud in Unity
         yield return null;
     }
 }

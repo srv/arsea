@@ -42,7 +42,7 @@ public class ArseaViewer : MonoBehaviour {
         // Define ROS Subscribers and Publishers
         ros.AddSubscriber(typeof(RobotNavSts)); // add subscribers as defined in the corresponding classes
         ros.AddSubscriber(typeof(RobotPointCloud2));
-        //ros.AddSubscriber(typeof(RobotImage));
+        ros.AddSubscriber(typeof(RobotImage));
         // ros.AddPublisher(typeof(RobotBodyVelocityRequest));
 
         // Define Services and clients if any

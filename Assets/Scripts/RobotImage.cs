@@ -12,6 +12,7 @@ using ROSBridgeLib.sensor_msgs;
 using System.Collections;
 using SimpleJSON;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class RobotImage : ROSBridgeSubscriber
@@ -44,29 +45,31 @@ public class RobotImage : ROSBridgeSubscriber
     int step = (int)image.GetRowStep();
     int data_size = n_rows * step;
 
+        //byte[] bImportedTexture = System.BitConverter.GetBytes(color_data);
+
         // Create a texture. Texture size does not matter, since
         // LoadImage will replace with with incoming image size.
         Texture2D tex = new Texture2D(n_rows, n_columns, TextureFormat.RGB24, false);
-        //tex.LoadImage(image.GetImage());
 
+        int count = 0;
         for (int i = 0; i < n_rows; i++)
         {
             for (int j = 0; j < n_columns; j++)
             {
-                byte R = color_data[step * i + j];
-                byte G = color_data[step * i + j + 1];
-                byte B = color_data[step * i + j + 2];
+                byte B = color_data[i * step + j];
+                byte G = color_data[i * step + j + 1];
+                byte R = color_data[i * step + j + 2];
                 Color c = new Color((float)R / 255.0f, (float)G / 255.0f, (float)B / 255.0f);
-                tex.SetPixel(i, j, Color.black);
+                tex.SetPixel(i, j, c);
             }
-
         }
 
-        //tex.LoadRawTextureData(image.GetImage());
-        //tex.Apply();
+        //tex.LoadRawTextureData(color_data);
+        tex.Apply();
+        //tex.LoadImage(bImportedTexture);  // No funciona
 
         GameObject cam_image = GameObject.Find("CameraImage");
-        cam_image.GetComponent<Renderer>().material.mainTexture = tex;
+        cam_image.GetComponent<RawImage>().texture = tex;
 
         //ArseaViewer viewer = (ArseaViewer)robot.GetComponent(typeof(ArseaViewer));
         //viewer.Paint_image(color_data, data_size,n_rows, n_columns);

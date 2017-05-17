@@ -6,7 +6,6 @@
  */
 
 using UnityEngine;
-using System.Collections;
 
 public class SwitchCamera : MonoBehaviour {
     public Camera camera1;
@@ -22,12 +21,9 @@ public class SwitchCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
         if (Input.GetKeyDown(KeyCode.C))
         {
-
             cameraindex = !cameraindex; 
-
             if (cameraindex)
             {
                 camera1.gameObject.SetActive(false);
@@ -40,6 +36,5 @@ public class SwitchCamera : MonoBehaviour {
                 cameraindex = false;
             }
         }
-
     }
 }

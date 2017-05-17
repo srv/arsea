@@ -34,7 +34,6 @@ public class RobotPointCloud2 : ROSBridgeSubscriber
 
     public new static void CallBack(ROSBridgeMsg msg)
     {
-        Debug.Log("<color=green>INFO:</color> RobotPointCloud2 CallBack!");
         if ( _i % 5 == 0)
         {
             PointCloud2Msg cloud_msg = (PointCloud2Msg)msg;

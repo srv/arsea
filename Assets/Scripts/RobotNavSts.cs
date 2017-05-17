@@ -15,26 +15,24 @@ using UnityEngine.UI;
 
 public class RobotNavSts : ROSBridgeSubscriber
 {
-    
+    public new static string GetMessageTopic()
+    {
+        return "/navigation/nav_sts";
+        //return "/cola2_navigation/nav_sts";
+    }
 
-  public new static string GetMessageTopic()
-  {
-    return "/navigation/nav_sts";
-    //return "/cola2_navigation/nav_sts";
-  }
+    public new static string GetMessageType()
+    {
+        return "auv_msgs/NavSts";
+    }
 
-  public new static string GetMessageType()
-  {
-    return "auv_msgs/NavSts";
-  }
+    public new static ROSBridgeMsg ParseMessage(JSONNode msg)
+    {
+        return new NavStsMsg(msg);
+    }
 
-  public new static ROSBridgeMsg ParseMessage(JSONNode msg)
-  {
-    return new NavStsMsg(msg);
-  }
-
-  public new static void CallBack(ROSBridgeMsg msg)
-  {
+    public new static void CallBack(ROSBridgeMsg msg)
+    {
         Debug.Log("<color=green>INFO:</color> NavStatus Message Callback");
         //Debug.Log("<color=green>INFO:</color> RobotNavSts CallBack!");
         GameObject model = GameObject.Find("Model"); // creates a GameObject (element of Unity type "model") 
@@ -52,17 +50,17 @@ public class RobotNavSts : ROSBridgeSubscriber
             NavStsMsg nav_sts = (NavStsMsg)msg;
             NEDMsg p = nav_sts.GetPosition();
             RPYMsg o = nav_sts.GetOrientation();
-            
-            //robot.transform.position = new Vector3(p.GetNorth(), -p.GetDepth(), -p.GetEast());
+
+            robot.transform.position = new Vector3(-p.GetNorth(), 0, p.GetEast());
             model.transform.position = new Vector3(-p.GetNorth(), -p.GetDepth(), p.GetEast()); // fbf 21/02/2017 in order to rotate the vehicle with respect its own vertical axis, the 
-            
+
             // angular position contained in the NavStatus must be set to the model transform, instead of to the robot transform, otherwise the rotation is with respect to the 
             // world systemo of coordinates with a rotation radius equal to the distance between the robot and the origin.
-            model.transform.rotation = Quaternion.Euler(o.GetRollDegrees()+90f, o.GetYawDegrees(), o.GetPitchDegrees()); //fbf  21/02/2017 needed transform to keep the vehicle unrotated
-                                                                                                                         //robot.transform.rotation = Quaternion.Euler(o.GetRollDegrees(), 180.0f + o.GetYawDegrees(), o.GetPitchDegrees());
+            model.transform.rotation = Quaternion.Euler(o.GetRollDegrees() + 90f, o.GetYawDegrees(), o.GetPitchDegrees()); //fbf  21/02/2017 needed transform to keep the vehicle unrotated
+                                                                                                                           //robot.transform.rotation = Quaternion.Euler(o.GetRollDegrees(), 180.0f + o.GetYawDegrees(), o.GetPitchDegrees());
 
             PointMsg lin_vel = nav_sts.GetBodyVelocity(); // get the body velocity from the nav__sts message
-            RPYMsg  ang_vel = nav_sts.GetOrientationRate();
+            RPYMsg ang_vel = nav_sts.GetOrientationRate();
             NEDMsg position = nav_sts.GetPosition();
             //ArseaViewer viewer = (ArseaViewer)robot.GetComponent(typeof(ArseaViewer));
             //viewer.Paint_speed(lin_vel, ang_vel, position);
@@ -72,7 +70,7 @@ public class RobotNavSts : ROSBridgeSubscriber
             Text NED_text = ned_canvas.GetComponent<Text>();
             int dp = 2;
             string format = string.Format("#.{0} m;-#.{0} m", new string('#', dp));
-            NED_text.text =  p.GetNorth().ToString(format) +
+            NED_text.text = p.GetNorth().ToString(format) +
                              "\n" + p.GetEast().ToString(format) +
                              "\n" + p.GetDepth().ToString(format) +
                              "\n" + nav_sts.GetAltitude().GetData().ToString(format);

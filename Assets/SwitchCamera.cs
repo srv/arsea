@@ -1,6 +1,6 @@
 ﻿/* 
  * @brief ARSEA Project
- * @author Francisco Bonin Font
+ * @author Francisco Bonin Font, Miquel Massot Campos
  * @author System, Robotics and Vision
  * @author University of the Balearic Islands
  */
@@ -16,6 +16,9 @@ public class SwitchCamera : MonoBehaviour {
     void Start () {
         //turn on the first camera
         camera1.gameObject.SetActive(true);
+        camera2.gameObject.SetActive(false);
+        camera1.enabled = true;
+        camera2.enabled = false;
         Debug.Log("Camera Active: " + camera1.gameObject.name);
 	}
 	
@@ -28,11 +31,15 @@ public class SwitchCamera : MonoBehaviour {
             {
                 camera1.gameObject.SetActive(false);
                 camera2.gameObject.SetActive(true);
+                camera1.enabled = false;
+                camera2.enabled = true;
             }
             else
             {
                 camera1.gameObject.SetActive(true);
                 camera2.gameObject.SetActive(false);
+                camera1.enabled = true;
+                camera2.enabled = false;
                 cameraindex = false;
             }
         }

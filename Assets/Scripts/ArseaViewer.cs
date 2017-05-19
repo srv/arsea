@@ -19,7 +19,6 @@ public class ArseaViewer : MonoBehaviour {
     public GameObject pointCloudContainer;
     private ROSBridgeWebSocketConnection ros = null;
 
-
     void Start() {
         // Set ROS
         Debug.Log("<color=green>INFO:</color> Connecting to " + ROS_IP + "...");
@@ -43,7 +42,7 @@ public class ArseaViewer : MonoBehaviour {
   
     // Update is called once per frame in Unity
     void Update() {
-        ros.Render();                    
+        ros.Render();
     }
 
     public void PushCloud(PointCloud2Msg cloud_msg) {
@@ -51,7 +50,7 @@ public class ArseaViewer : MonoBehaviour {
     }
 
     private IEnumerator DrawCloud(PointCloud2Msg cloud_msg) {
-        PointCloud2Prefab converter = new PointCloud2Prefab(cloud_msg.GetCloud(), cloud_msg.GetHeader().GetSeq(), matVertex);
+        PointCloud2Prefab converter = new PointCloud2Prefab(cloud_msg.GetPoints(), cloud_msg.GetColors(), cloud_msg.GetHeader().GetSeq(), matVertex);
         GameObject cloud_go = converter.GetPrefab();   
         cloud_go.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
         cloud_go.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1);

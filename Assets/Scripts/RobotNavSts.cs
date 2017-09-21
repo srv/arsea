@@ -48,7 +48,7 @@ public class RobotNavSts : ROSBridgeSubscriber
             NEDMsg p = nav_sts.GetPosition();
             RPYMsg o = nav_sts.GetOrientation();
             robot.transform.position = new Vector3(-p.GetNorth(), 0, p.GetEast());
-
+            
             Vector3 next_position = new Vector3(-p.GetNorth(), -p.GetDepth(), p.GetEast());
             Quaternion next_orientation = Quaternion.Euler(o.GetRollDegrees() + 90f, o.GetYawDegrees(), o.GetPitchDegrees());
             r.AddWaypoint(next_position, next_orientation);

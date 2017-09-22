@@ -21,7 +21,7 @@ public class RobotBodyVelocityRequest: ROSBridgePublisher
 
     public new static string GetMessageTopic()
     {
-        return "/unity/body_velocity_req";
+        return "/control/body_velocity_req";
         //return "/unity/twist"; 
     }
 

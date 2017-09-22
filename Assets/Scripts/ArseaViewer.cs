@@ -66,19 +66,22 @@ public class ArseaViewer : MonoBehaviour {
         // header: int seq, TimeMsg stamp, string frame_id
         System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
         double cur_time = ((System.DateTime.UtcNow - epochStart).TotalSeconds); // in seconds
-        print("cur_time" + cur_time);
+        //print("cur_time" + cur_time);
         double decimalPart = cur_time % 1; // get the decimal part
         int secs  = (int)(cur_time-decimalPart); //take the integer part of the timestamp expressed in nanoseconds
-        print("seconds" + secs);
+        //print("seconds" + secs);
         int nsecs = (int)(decimalPart*1000000000); // take the nanoseconds
-        print("nsencs"+ nsecs);
+        //print("nsencs"+ nsecs);
         TimeMsg stamp = new TimeMsg(secs , nsecs);
         HeaderMsg header = new HeaderMsg(0,stamp,"/unity"); //frame id=/unity.
 
         BodyVelocityRequestMsg msg = new BodyVelocityRequestMsg(header, goal, twist,dissable_axis); // create a clase of message to be published
-        print("Body request" + twist);
-        ros.Publish(RobotBodyVelocityRequest.GetMessageTopic(), msg); // descomentar !! -- 18/09/2017
+        //print("Body request" + twist);
+        if (Global_Variables.activate_control) //send velocity commands only if the Unity Control is active
+                ros.Publish(RobotBodyVelocityRequest.GetMessageTopic(), msg); // descomentar !! -- 18/09/2017
+
         //ros.Publish(RobotBodyVelocityRequest.GetMessageTopic(), twist); // descomentar !! -- 18/09/2017
+
         if (Global_Variables.stop_motors) // dissable motors if required with the "A" button
         {
           ros.CallService("/control/disable_thrusters");

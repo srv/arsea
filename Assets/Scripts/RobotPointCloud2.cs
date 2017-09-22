@@ -20,14 +20,15 @@ public class RobotPointCloud2 : ROSBridgeSubscriber
     public new static string GetMessageTopic()
     {
         //return "/rema_ros/frame_points";
-        return "/cloud";
-        //return "/stereo_down/scaled_x2/points2";
+        //return "/cloud";
+        return "/stereo_down/scaled_x2/points2";
         //return "/octomap_server_local_plan/octomap_point_cloud_centers";
     }
 
     public new static string GetMessageType()
     {
         return "sensor_msgs/PointCloud2"; // define the type of message. We wait for a PointCloud2 contained in the 'points' topic
+
     }
 
     public new static ROSBridgeMsg ParseMessage(JSONNode msg)

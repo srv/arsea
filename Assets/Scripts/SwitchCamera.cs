@@ -11,12 +11,16 @@ using UnityEngine;
 public class SwitchCamera : MonoBehaviour {
     public Camera Camera1;
     public Camera Camera2;
+    public Camera Camera3;
     // Use this for initialization
     void Start () {
         //turn on the first camera
         Camera1.gameObject.SetActive(true);
-       // Camera2.gameObject.SetActive(false);
+        Camera2.gameObject.SetActive(false);
         Camera1.enabled = true;
+        Camera2.enabled = false;
+        Camera3.enabled = false;
+        Camera3.gameObject.SetActive(false);
         Debug.Log("Camera Active: " + Camera1.gameObject.name);
 	}
 	
@@ -26,23 +30,22 @@ public class SwitchCamera : MonoBehaviour {
        // print("Switch Image");
         if (Global_Variables.change_camera)
         {
-           // print("Key C pressed");
             Global_Variables.cameraindex = !Global_Variables.cameraindex; 
             if (Global_Variables.cameraindex)
             {
                 print("activo camera 1");
-                Camera1.gameObject.SetActive(false);
-                Camera2.gameObject.SetActive(true);
-                Camera1.enabled = false;
-                Camera2.enabled = true;
-            }
-            else
-            {
-                print("activo camera 2");
                 Camera1.gameObject.SetActive(true);
                 Camera2.gameObject.SetActive(false);
                 Camera1.enabled = true;
                 Camera2.enabled = false;
+            }
+            else
+            {
+                print("activo camera 2");
+                Camera1.gameObject.SetActive(false);
+                Camera2.gameObject.SetActive(true);
+                Camera1.enabled = false;
+                Camera2.enabled = true;
             }
         }
      Global_Variables.change_camera = false;

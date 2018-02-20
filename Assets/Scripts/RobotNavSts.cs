@@ -4,13 +4,13 @@
  * @author System, Robotics and Vision
  * @author University of the Balearic Islands
  */
-
+using UnityEngine;
+using System.Collections;
 using ROSBridgeLib;
 using ROSBridgeLib.auv_msgs;
+using ROSBridgeLib.std_msgs;
 using ROSBridgeLib.geometry_msgs;
-using System.Collections;
 using SimpleJSON;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class RobotNavSts : ROSBridgeSubscriber
@@ -47,7 +47,9 @@ public class RobotNavSts : ROSBridgeSubscriber
             NavStsMsg nav_sts = (NavStsMsg)msg;
             NEDMsg p = nav_sts.GetPosition();
             RPYMsg o = nav_sts.GetOrientation();
-            robot.transform.position = new Vector3(-p.GetNorth(), 0, p.GetEast());
+            Float32Msg altitude=nav_sts.GetAltitude();
+           // Debug.Log("position" + p + "altitude" + altitude);
+            robot.transform.position = new Vector3(-p.GetNorth(),0, p.GetEast());
             
             Vector3 next_position = new Vector3(-p.GetNorth(), -p.GetDepth(), p.GetEast());
             Quaternion next_orientation = Quaternion.Euler(o.GetRollDegrees() + 90f, o.GetYawDegrees(), o.GetPitchDegrees());

@@ -14,7 +14,8 @@ using System.Collections.Generic;
 public static class Global_Variables { 
     public static double vel_linear_x;
     public static double vel_linear_y;
-    public static double vel_linear_z;
+    public static float vel_linear_z;
+    public static double yaw;
     // Use this for initialization
     public static bool stop_motors=false;
     public static bool start_motors = false;

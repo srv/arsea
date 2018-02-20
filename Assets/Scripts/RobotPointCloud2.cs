@@ -20,8 +20,8 @@ public class RobotPointCloud2 : ROSBridgeSubscriber
     public new static string GetMessageTopic()
     {
         //return "/rema_ros/frame_points";
-        //return "/cloud";
-        return "/stereo_down/scaled_x2/points2";
+        return "/cloud";
+        ///return "/stereo_down/scaled_x2/points2";
         //return "/octomap_server_local_plan/octomap_point_cloud_centers";
     }
 

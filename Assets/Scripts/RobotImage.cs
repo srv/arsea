@@ -16,7 +16,7 @@ public class RobotImage : ROSBridgeSubscriber
 {
     public new static string GetMessageTopic()
     {
-        return "/stereo_down/scaled_x2/left/image_rect_color";
+        return "/stereo_down/scaled_x4/left/image_rect_color";
     }
 
     public new static string GetMessageType()

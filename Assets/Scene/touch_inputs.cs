@@ -49,20 +49,22 @@ public class touch_inputs : MonoBehaviour
 
         if (OVRInput.Get(OVRInput.Button.Start))
         {
-            Debug.Log(" Pushed button 'Start', change camera");  
+            Debug.Log(" Pushed button 'Start', change camera");  // chage camera and scene point of view 
             Global_Variables.change_camera = true;
         }
 
         // fbf 22_09_2017 --> the axis configuration of the Primary and SecondaryThumstick is : y axis is the vertical and x axis is the horizontal. Positive x are to the right and negative to the left. Positive y are upwards and negative downwards.
         //Vector2 touchAxis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick) * Time.deltaTime;
-        Vector2 touchAxis_h = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick); // got the touch 2D axis values of the left controller to navigate in the horizontal plane
+        Vector2 touchAxis_h = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick); // get the touch 2D axis values of the right controller to navigate in the horizontal plane
         Global_Variables.vel_linear_x = touchAxis_h.y;
         Global_Variables.vel_linear_y = touchAxis_h.x;
-        // print("Selected velocity: " + Global_Variables.vel_linear_x + " Y: " + Global_Variables.vel_linear_y); // print the selected direction of motion.
+         // calculate the yaw angle for the body velocity request.angular.z
+        Global_Variables.yaw = Mathf.Atan2((float)Global_Variables.vel_linear_y, (float)Global_Variables.vel_linear_x);
+      //  print("Selected velocity: Y:" + Global_Variables.vel_linear_x + " X: " + Global_Variables.vel_linear_y); // print the selected direction of motion.
       //  Debug.Log("Axis Values X, Y: " + touchAxis_h.y + touchAxis_h.x);
 
-        Vector2 touchAxis_v = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick); // got the touch 2D axis values of the right controller to navigate in the vertical direction
-        Global_Variables.vel_linear_z = touchAxis_v.y; ;
+        Vector2 touchAxis_v = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick); // get the touch 2D axis values of the left controller to navigate in the vertical direction
+        Global_Variables.vel_linear_z = -touchAxis_v.y; ;
         // print("Selected velocity: " + Global_Variables.vel_linear_x + " Y: " + Global_Variables.vel_linear_y); // print the selected direction of motion.
       //  Debug.Log("Axis Values Z: " + touchAxis_v.y);
 

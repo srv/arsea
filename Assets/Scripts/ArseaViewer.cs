@@ -17,7 +17,7 @@ using ROSBridgeLib.std_msgs;
 
 
 public class ArseaViewer : MonoBehaviour {
-   public string ROS_IP = "192.168.1.115";
+   public string ROS_IP = "192.168.1.201"; // PC portatil Xesc connectat a la wifi SRV
    // public string ROS_IP = "172.22.38.119";
     public int port = 9090;
     public Transform robotToCamera;
@@ -33,9 +33,10 @@ public class ArseaViewer : MonoBehaviour {
         Global_Variables.stop_motors = false;
         // Define ROS Subscribers and Publishers
         ros.AddSubscriber(typeof(RobotNavSts)); // add subscribers as defined in the corresponding classes
-        ros.AddSubscriber(typeof(RobotPointCloud2));
+        ros.AddSubscriber(typeof(RobotPointCloud2)); // comment for tests with UWSIM
         ros.AddSubscriber(typeof(RobotImage));
         ros.AddPublisher(typeof(RobotBodyVelocityRequest));
+        ros.AddServiceResponse(typeof(ArseaServiceResponse)); // this is necessary to avoid errors of the RosbridgeWebSocketConnection
        // ros.AddPublisher(typeof());
         ros.Connect();
 
@@ -56,11 +57,12 @@ public class ArseaViewer : MonoBehaviour {
         double vx = Global_Variables.vel_linear_x;
         double vy = Global_Variables.vel_linear_y;
         double vz = Global_Variables.vel_linear_z;
+        double yaw = (double)Global_Variables.yaw;
 
         // HeaderMsg header, GoalDescriptorMsg goal, TwistMsg twist, auv_msgs.Bool6AxisMsg disable_axis
         // twist for the boby velocity request: linear + angular speeds
-        TwistMsg twist = new TwistMsg(new Vector3Msg(vx,vy,vz), new Vector3Msg(0.0, 0.0,0.0));
-        Bool6AxisMsg dissable_axis = new Bool6AxisMsg(false,false,false,false,false,false); // dissable axis field for the body velocity request
+        TwistMsg twist = new TwistMsg(new Vector3Msg(vx,vy,vz), new Vector3Msg(0.0, 0.0, Global_Variables.yaw));
+        Bool6AxisMsg dissable_axis = new Bool6AxisMsg(false,false,false,true,true,false); // dissable axis field for the body velocity request
         string requester = "/teleoperation";
         GoalDescriptorMsg goal = new GoalDescriptorMsg(requester, 0, 60); // id= 0, priority=60
         // header: int seq, TimeMsg stamp, string frame_id
@@ -73,12 +75,13 @@ public class ArseaViewer : MonoBehaviour {
         int nsecs = (int)(decimalPart*1000000000); // take the nanoseconds
         //print("nsencs"+ nsecs);
         TimeMsg stamp = new TimeMsg(secs , nsecs);
-        HeaderMsg header = new HeaderMsg(0,stamp,"/unity"); //frame id=/unity.
+        HeaderMsg header = new HeaderMsg(0,stamp,"/map"); //frame id=/map.
 
-        BodyVelocityRequestMsg msg = new BodyVelocityRequestMsg(header, goal, twist,dissable_axis); // create a clase of message to be published
+        BodyVelocityRequestMsg msg = new BodyVelocityRequestMsg(header, goal, twist, dissable_axis); // create a clase of message to be published
         //print("Body request" + twist);
         if (Global_Variables.activate_control) //send velocity commands only if the Unity Control is active
-                ros.Publish(RobotBodyVelocityRequest.GetMessageTopic(), msg); // descomentar !! -- 18/09/2017
+           // print("publish body vel. request:" + msg.ToString()); // print requested vel..
+            ros.Publish(RobotBodyVelocityRequest.GetMessageTopic(), msg); // descomentar !! -- 18/09/2017
 
         //ros.Publish(RobotBodyVelocityRequest.GetMessageTopic(), twist); // descomentar !! -- 18/09/2017
 
